@@ -58,7 +58,7 @@
   .nav-cta:hover { opacity: 0.9 !important; color: var(--navy-deep) !important; }
 
   #hero { min-height: 100vh; background: var(--navy-deep); position: relative; overflow: hidden; display: flex; align-items: center; }
-  .hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(0,21,64,0.92) 0%, rgba(0,35,102,0.70) 100%), url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1920&q=80'); background-size: cover; background-position: center; }
+  .hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(0,21,64,0.92) 0%, rgba(0,35,102,0.70) 100%), url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Tanjung_Priok_Port.jpg/1280px-Tanjung_Priok_Port.jpg'); background-size: cover; background-position: center; }
   .hero-wave { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; background: var(--white); clip-path: ellipse(55% 100% at 50% 100%); }
   .hero-particles { position: absolute; inset: 0; pointer-events: none; }
   .particle { position: absolute; border-radius: 50%; background: rgba(201,168,76,0.15); animation: float linear infinite; }
@@ -303,7 +303,7 @@
   <div class="hero-wave"></div>
   <div class="hero-content">
     <div>
-      <div class="hero-eyebrow">Program Magang 2025 · Terbuka</div>
+      <div class="hero-eyebrow">Program Magang 2026 · Terbuka</div>
       <h1 class="hero-title">Bergabunglah dengan<br><em>Garda Terdepan</em><br>Keselamatan Maritim</h1>
       <p class="hero-desc">Dapatkan pengalaman langsung dalam operasional sistem meteorologi maritim skala nasional bersama tim profesional BMKG Tanjung Perak.</p>
       <div class="hero-actions">
@@ -547,24 +547,7 @@ const quotaData = {
   '5-bulan': { label: '5 Bulan', registered: [], maxDuration: 150 }
 };
 
-(function seedData() {
-  const today = new Date();
-  for (let i = 0; i < 9; i++) {
-    const start = new Date(today); start.setDate(start.getDate() - Math.floor(Math.random()*40+5));
-    const end = new Date(start); end.setDate(end.getDate() + 30);
-    quotaData['1-bulan'].registered.push({ start, end });
-  }
-  for (let i = 0; i < 4; i++) {
-    const start = new Date(today); start.setDate(start.getDate() - 10);
-    const end = new Date(start); end.setDate(end.getDate() + 90);
-    quotaData['3-bulan'].registered.push({ start, end });
-  }
-  for (let i = 0; i < 2; i++) {
-    const start = new Date(today); start.setDate(start.getDate() - 5);
-    const end = new Date(start); end.setDate(end.getDate() + 150);
-    quotaData['5-bulan'].registered.push({ start, end });
-  }
-})();
+// Kuota mulai dari 0, hanya bertambah saat ada pendaftar baru
 
 function getActiveCount(key) {
   const today = new Date();
