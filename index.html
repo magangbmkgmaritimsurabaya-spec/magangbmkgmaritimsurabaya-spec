@@ -583,6 +583,29 @@ const quotaData = {
   '5-bulan': { label: '5 Bulan', registered: [], maxDuration: 150 }
 };
 
+// ── LOAD dari localStorage saat halaman dibuka ──
+function loadQuotaFromStorage() {
+  ['1-bulan','3-bulan','5-bulan'].forEach(key => {
+    const saved = localStorage.getItem('quota_' + key);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      quotaData[key].registered = parsed.map(r => ({
+        start: new Date(r.start),
+        end: new Date(r.end)
+      }));
+    }
+  });
+}
+
+// ── SIMPAN ke localStorage ──
+function saveQuotaToStorage() {
+  ['1-bulan','3-bulan','5-bulan'].forEach(key => {
+    localStorage.setItem('quota_' + key, JSON.stringify(quotaData[key].registered));
+  });
+}
+
+loadQuotaFromStorage();
+
 // Kuota mulai dari 0, hanya bertambah saat ada pendaftar baru
 
 function getActiveCount(key) {
@@ -860,6 +883,7 @@ async function submitForm() {
   const tglSelesai = new Date(tglMulai);
   tglSelesai.setDate(tglSelesai.getDate() + quotaData[selectedDuration].maxDuration);
   quotaData[selectedDuration].registered.push({ start: tglMulai, end: tglSelesai });
+  saveQuotaToStorage();
 
   const regId = 'BMKG-' + Date.now().toString().slice(-6);
   const nama  = document.getElementById('f-nama').value;
