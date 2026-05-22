@@ -573,7 +573,7 @@
 // ─────────────────────────────────────────────
 //  GANTI URL INI dengan URL deployment Apps Script kamu
 // ─────────────────────────────────────────────
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCH3ou3_J_Fsd7KTYIfDebGyC1CMBvmMJaX0w_c_n3OFToptE8QnyKGV6Q39iRkCiVJQ/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKzSkiKUrleQMGCU6rOnemzZs3OETTf6GWFg7Wb7qIgwnkOJTqwgMWZ7-oBhNrSj7Phw/exec';
 
 // ── QUOTA DATA ──
 const QUOTA_MAX = 10;
@@ -966,7 +966,30 @@ function revealCheck() {
 }
 
 // ── DRAG & DROP ──
-document.addEventListener('DOMContentLoaded', () => {
+// ── LOAD KUOTA DARI GOOGLE SHEETS ──
+async function loadQuotaFromSheets() {
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL);
+    const json = await res.json();
+    if (json.status === 'ok' && json.quota) {
+      ['1-bulan','3-bulan','5-bulan'].forEach(key => {
+        const count = json.quota[key] || 0;
+        // Reset dan isi registered dengan data dummy sesuai jumlah dari Sheets
+        quotaData[key].registered = [];
+        for (let i = 0; i < count; i++) {
+          const future = new Date();
+          future.setDate(future.getDate() + quotaData[key].maxDuration);
+          quotaData[key].registered.push({ start: new Date(), end: future });
+        }
+      });
+      saveQuotaToStorage();
+    }
+  } catch(err) {
+    console.warn('Gagal load kuota dari Sheets, pakai localStorage:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
   ['cv','transkip','proposal','foto'].forEach(key => {
     const zone = document.getElementById('zone-' + key);
     if (!zone) return;
@@ -980,11 +1003,16 @@ document.addEventListener('DOMContentLoaded', () => {
       handleFile(key, input);
     });
   });
+  // Tampilkan dulu dari localStorage, lalu update dari Sheets
   renderHeroQuota();
   renderProgramCards();
   revealObserver();
   renderParticles();
   lucide.createIcons();
+  // Ambil data real dari Sheets lalu render ulang
+  await loadQuotaFromSheets();
+  renderHeroQuota();
+  renderProgramCards();
 });
 
 document.getElementById('form-overlay').addEventListener('click', e => { if (e.target === document.getElementById('form-overlay')) closeForm(); });
