@@ -47,7 +47,7 @@
     height: 68px;
     display: flex; align-items: center; justify-content: space-between;
   }
-  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .nav-brand { display: flex; align-items: center; gap: 14px; padding: 8px 14px 8px 0; border-right: 1px solid rgba(201,168,76,0.2); margin-right: 4px; }
   .nav-text { color: var(--white); }
   .nav-text strong { display: block; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; }
   .nav-text span { font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.55); letter-spacing: 0.8px; text-transform: uppercase; }
@@ -288,7 +288,7 @@
 
 <nav>
   <div class="nav-brand">
-    <img src="https://iili.io/Brm6aGS.png" alt="Logo BMKG Maritim" style="height: 50px; width: auto; display: block;">
+    <img src="https://iili.io/Brm6aGS.png" alt="Logo BMKG Maritim" style="height: 44px; width: 44px; object-fit: contain; display: block; filter: drop-shadow(0 0 6px rgba(201,168,76,0.3));">
     <div class="nav-text">
       <strong>Stasiun Meteorologi Maritim</strong>
       <span>Tanjung Perak Surabaya</span>
@@ -327,7 +327,7 @@
         <div class="info-rows">
           <div class="info-row"><div class="info-icon"><i data-lucide="waves"></i></div><span>Maritime Meteorological System (MMS)</span></div>
           <div class="info-row"><div class="info-icon"><i data-lucide="radio"></i></div><span>Jaringan AWS & sensor gelombang real-time</span></div>
-          <div class="info-row"><div class="info-icon"><i data-lucide="map"></i></div><span>Jl. Tanjung Perak Timur, Surabaya 60165</span></div>
+          <div class="info-row"><div class="info-icon"><i data-lucide="map"></i></div><span>Jl. Kalimas Baru No. 97B, Perak Utara, Surabaya 60165</span></div>
         </div>
       </div>
     </div>
@@ -335,25 +335,30 @@
 </section>
 
 
-<section id="stats" style="background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%); padding: 2.5rem 2rem; position: relative; overflow: hidden;">
-  <div style="position:absolute;inset:0;background:url('https://images.pexels.com/photos/1618387/pexels-photo-1618387.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover no-repeat;opacity:0.08;"></div>
+<section id="stats" style="background: linear-gradient(135deg, #001540 0%, #002366 60%, #003399 100%); padding: 3.5rem 2rem; position: relative; overflow: hidden; border-top: 1px solid rgba(201,168,76,0.2); border-bottom: 1px solid rgba(201,168,76,0.2);">
+  <div style="position:absolute;inset:0;background:url('https://images.pexels.com/photos/1618387/pexels-photo-1618387.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover no-repeat;opacity:0.07;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,21,64,0.6) 0%,transparent 40%,transparent 60%,rgba(0,21,64,0.6) 100%);"></div>
   <div class="container" style="position:relative;z-index:1;">
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center;">
-      <div>
-        <div style="font-size:2rem;font-weight:800;color:var(--gold);">30</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">Kuota Tersedia</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;text-align:center;">
+      <div style="padding:1rem 2rem;border-right:1px solid rgba(201,168,76,0.2);">
+        <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">30</div>
+        <div style="width:32px;height:2px;background:var(--gold);margin:10px auto;border-radius:1px;opacity:0.6;"></div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;">Kuota Tersedia</div>
       </div>
-      <div>
-        <div style="font-size:2rem;font-weight:800;color:var(--gold);">3</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">Pilihan Durasi</div>
+      <div style="padding:1rem 2rem;border-right:1px solid rgba(201,168,76,0.2);">
+        <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">3</div>
+        <div style="width:32px;height:2px;background:var(--gold);margin:10px auto;border-radius:1px;opacity:0.6;"></div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;">Pilihan Durasi</div>
       </div>
-      <div>
-        <div style="font-size:2rem;font-weight:800;color:var(--gold);">24/7</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">Monitoring Aktif</div>
+      <div style="padding:1rem 2rem;border-right:1px solid rgba(201,168,76,0.2);">
+        <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">24/7</div>
+        <div style="width:32px;height:2px;background:var(--gold);margin:10px auto;border-radius:1px;opacity:0.6;"></div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;">Monitoring Aktif</div>
       </div>
-      <div>
-        <div style="font-size:2rem;font-weight:800;color:var(--gold);">Kelas II</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">Stasiun BMKG</div>
+      <div style="padding:1rem 2rem;">
+        <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">II</div>
+        <div style="width:32px;height:2px;background:var(--gold);margin:10px auto;border-radius:1px;opacity:0.6;"></div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;">Kelas Stasiun BMKG</div>
       </div>
     </div>
   </div>
@@ -554,12 +559,12 @@
     </div>
     <div class="footer-col">
       <h4>Kontak</h4>
-      <ul><li>Jl. Tanjung Perak Timur</li><li>Surabaya 60165</li><li>Jawa Timur, Indonesia</li><li>bmkg-maritim-sby@bmkg.go.id</li></ul>
+      <ul><li>Jl. Kalimas Baru No. 97B</li><li>Perak Utara, Surabaya 60165</li><li>Jawa Timur, Indonesia</li><li>(031) 3291439 / 3287123</li><li>stamar.tanjungperak@bmkg.go.id</li></ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2025 BMKG Maritim Tanjung Perak Surabaya. Hak cipta dilindungi undang-undang.</span>
-    <span>Dikembangkan untuk Program Magang <a href="#">2025</a></span>
+    <span>Dikembangkan untuk Program Magang <a href="#">2026</a></span>
   </div>
 </footer>
 
