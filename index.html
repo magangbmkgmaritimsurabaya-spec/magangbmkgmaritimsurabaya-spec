@@ -59,7 +59,6 @@
 
   #hero { min-height: 100vh; background: var(--navy-deep); position: relative; overflow: hidden; display: flex; align-items: center; }
   .hero-bg { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(0,21,64,0.92) 0%, rgba(0,35,102,0.70) 100%), url('https://images.pexels.com/photos/906982/pexels-photo-906982.jpeg?auto=compress&cs=tinysrgb&w=1920'); background-size: cover; background-position: center; }
-  .hero-wave { display: none; }
   .hero-particles { position: absolute; inset: 0; pointer-events: none; }
   .particle { position: absolute; border-radius: 50%; background: rgba(201,168,76,0.15); animation: float linear infinite; }
   @keyframes float { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 0.5; } 100% { transform: translateY(-100px) scale(1); opacity: 0; } }
@@ -78,7 +77,6 @@
   .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
 
   .hero-visual { display: none; }
-  /* override: was originally flex... */
   @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   .hero-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 1.25rem 1.5rem; backdrop-filter: blur(8px); }
   .hero-card-header { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px; }
@@ -118,6 +116,29 @@
   .feat-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--navy); display: flex; align-items: center; justify-content: center; color: var(--white); flex-shrink: 0; }
   .feat-title { font-size: 13px; font-weight: 700; color: var(--navy-deep); margin-bottom: 0.25rem; }
   .feat-desc { font-size: 12px; color: var(--gray-text); line-height: 1.5; }
+
+  /* ── BATCH SECTION ── */
+  #batch { background: var(--navy-deep); position: relative; overflow: hidden; }
+  #batch::before { content: ''; position: absolute; inset: 0; background: url('https://images.pexels.com/photos/1430676/pexels-photo-1430676.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover no-repeat; opacity: 0.05; }
+  #batch .container { position: relative; z-index: 1; }
+  #batch .section-tag { color: var(--gold-light); }
+  #batch .section-tag::before { background: var(--gold); }
+  #batch .section-title { color: var(--white); }
+  #batch .section-desc { color: rgba(255,255,255,0.6); }
+
+  .batch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 3rem; }
+  .batch-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 1.25rem; transition: border-color 0.2s, background 0.2s; position: relative; overflow: hidden; }
+  .batch-card:hover { border-color: rgba(201,168,76,0.4); background: rgba(255,255,255,0.08); }
+  .batch-card.open { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+  .batch-card.open::before { content: 'SEDANG BUKA'; position: absolute; top: 0; right: 0; background: var(--gold); color: var(--navy-deep); font-size: 8px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-bottom-left-radius: 8px; }
+  .batch-card.closed { opacity: 0.55; }
+  .batch-card.closed::before { content: 'SUDAH TUTUP'; position: absolute; top: 0; right: 0; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); font-size: 8px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-bottom-left-radius: 8px; }
+  .batch-card.upcoming::before { content: 'BELUM DIBUKA'; position: absolute; top: 0; right: 0; background: rgba(74,144,217,0.25); color: var(--sky); font-size: 8px; font-weight: 800; letter-spacing: 1px; padding: 3px 10px; border-bottom-left-radius: 8px; }
+  .batch-num { font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .batch-name { font-size: 14px; font-weight: 800; color: var(--white); margin-bottom: 0.25rem; }
+  .batch-months { font-size: 11px; color: rgba(255,255,255,0.55); margin-bottom: 0.75rem; }
+  .batch-period { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 0.5px; text-transform: uppercase; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); }
+  .batch-start-info { font-size: 11px; color: var(--gold-light); font-weight: 700; margin-top: 6px; display: flex; align-items: center; gap: 4px; }
 
   #program { background: var(--gray-light); position: relative; overflow: hidden; }
   #program .container { position: relative; z-index: 1; }
@@ -188,6 +209,13 @@
   .form-textarea { resize: vertical; min-height: 80px; }
   .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
 
+  /* Batch info box di form */
+  .batch-info-box { grid-column: 1 / -1; background: linear-gradient(135deg, var(--foam), #dbeafe); border: 1.5px solid rgba(0,87,183,0.2); border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 12px; }
+  .batch-info-box .batch-badge { background: var(--navy); color: var(--white); font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; }
+  .batch-info-box .batch-detail { font-size: 12px; color: var(--navy-deep); }
+  .batch-info-box .batch-detail strong { display: block; font-weight: 700; }
+  .batch-info-box .batch-detail span { color: var(--gray-text); font-size: 11px; }
+
   .duration-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; grid-column: 1 / -1; }
   .duration-opt { border: 1.5px solid var(--gray-mid); border-radius: 10px; padding: 1rem; cursor: pointer; text-align: center; transition: all 0.2s; position: relative; }
   .duration-opt:hover:not(.disabled) { border-color: var(--navy); background: var(--foam); }
@@ -256,13 +284,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .spinner.show { display: inline-block; }
 
-  /* Status banner pengiriman */
-  .send-status {
-    display: none; margin: 0 2.5rem 1rem;
-    padding: 10px 14px; border-radius: 8px;
-    font-size: 12px; font-weight: 600;
-    align-items: center; gap: 8px;
-  }
+  .send-status { display: none; margin: 0 2.5rem 1rem; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; align-items: center; gap: 8px; }
   .send-status.show { display: flex; }
   .send-status.info { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
   .send-status.error { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
@@ -273,6 +295,7 @@
     nav .nav-links { display: none; }
     .about-grid, .req-grid { grid-template-columns: 1fr; }
     .program-grid { grid-template-columns: 1fr; }
+    .batch-grid { grid-template-columns: repeat(2, 1fr); }
     .form-grid { grid-template-columns: 1fr; }
     .upload-grid { grid-template-columns: 1fr; }
     .duration-selector { grid-template-columns: 1fr; }
@@ -297,6 +320,7 @@
   </div>
   <ul class="nav-links">
     <li><a href="#tentang">Tentang Kami</a></li>
+    <li><a href="#batch">Jadwal Batch</a></li>
     <li><a href="#program">Program</a></li>
     <li><a href="#persyaratan">Persyaratan</a></li>
     <li><a href="#program" class="nav-cta">Daftar Sekarang</a></li>
@@ -307,7 +331,6 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-particles" id="particles"></div>
-  <div class="hero-wave"></div>
   <div class="hero-content">
     <div>
       <div class="hero-eyebrow">Program Magang 2026 · Terbuka</div>
@@ -315,7 +338,7 @@
       <p class="hero-desc">Dapatkan pengalaman langsung dalam operasional sistem meteorologi maritim skala nasional bersama tim profesional BMKG Tanjung Perak.</p>
       <div class="hero-actions">
         <a href="#program" class="btn-primary">Daftar Sekarang <i data-lucide="arrow-right" class="icon-sm"></i></a>
-        <a href="#tentang" class="btn-secondary">Pelajari Lebih Lanjut</a>
+        <a href="#batch" class="btn-secondary">Lihat Jadwal Batch</a>
       </div>
     </div>
     <div class="hero-visual">
@@ -335,21 +358,20 @@
   </div>
 </section>
 
-
 <section id="stats" style="background: linear-gradient(135deg, #001540 0%, #002366 60%, #003399 100%); padding: 3.5rem 2rem; position: relative; overflow: hidden; border-top: 1px solid rgba(201,168,76,0.2); border-bottom: 1px solid rgba(201,168,76,0.2);">
   <div style="position:absolute;inset:0;background:url('https://images.pexels.com/photos/1618387/pexels-photo-1618387.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover no-repeat;opacity:0.07;"></div>
   <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,21,64,0.6) 0%,transparent 40%,transparent 60%,rgba(0,21,64,0.6) 100%);"></div>
   <div class="container" style="position:relative;z-index:1;">
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;text-align:center;">
       <div style="padding:1rem 2rem;border-right:1px solid rgba(201,168,76,0.2);">
-        <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">30</div>
+        <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">10</div>
         <div style="width:32px;height:2px;background:var(--gold);margin:10px auto;border-radius:1px;opacity:0.6;"></div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;">Kuota Tersedia</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;">Kuota Per Durasi</div>
       </div>
       <div style="padding:1rem 2rem;border-right:1px solid rgba(201,168,76,0.2);">
-        <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">3</div>
+        <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">7</div>
         <div style="width:32px;height:2px;background:var(--gold);margin:10px auto;border-radius:1px;opacity:0.6;"></div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;">Pilihan Durasi</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1.5px;">Batch Per Tahun</div>
       </div>
       <div style="padding:1rem 2rem;border-right:1px solid rgba(201,168,76,0.2);">
         <div style="font-size:2.5rem;font-weight:800;color:var(--gold);line-height:1;">24/7</div>
@@ -364,6 +386,7 @@
     </div>
   </div>
 </section>
+
 <section id="tentang">
   <div class="container">
     <div class="section-tag">Tentang Kami</div>
@@ -390,12 +413,23 @@
   </div>
 </section>
 
+<!-- ── SECTION BATCH ── -->
+<section id="batch">
+  <div class="container">
+    <div class="section-tag">Jadwal Penerimaan</div>
+    <h2 class="section-title">Batch Magang 2026</h2>
+    <p class="section-desc">Pendaftaran dibagi dalam 7 batch per tahun mengikuti ritme akademik. Batch ditentukan otomatis berdasarkan bulan pendaftaran Anda.</p>
+    <div class="batch-grid reveal" id="batch-grid"></div>
+  </div>
+</section>
+
 <section id="program">
   <div class="container">
     <div class="section-tag">Program Magang</div>
     <h2 class="section-title">Pilih Durasi Program Anda</h2>
-    <p class="section-desc">Tiga opsi durasi magang dirancang untuk memenuhi kebutuhan akademik dan profesi Anda. Kuota terbatas — segera daftarkan diri.</p>
-    <div class="program-grid"></div>
+    <p class="section-desc">Tiga opsi durasi magang dirancang untuk memenuhi kebutuhan akademik dan profesi Anda. Kuota fresh setiap batch — segera daftarkan diri.</p>
+    <div id="active-batch-banner" style="margin-top: 1.5rem;"></div>
+    <div class="program-grid" id="program-grid"></div>
   </div>
 </section>
 
@@ -443,7 +477,7 @@
   <div class="form-modal">
     <div class="form-header">
       <button class="form-close" onclick="closeForm()"><i data-lucide="x"></i></button>
-      <div class="form-header-tag">Pendaftaran Program Magang 2025</div>
+      <div class="form-header-tag">Pendaftaran Program Magang 2026</div>
       <h2>Formulir Pendaftaran Magang</h2>
       <p>Stasiun Meteorologi Maritim Kelas II Tanjung Perak Surabaya</p>
     </div>
@@ -477,11 +511,23 @@
       <!-- Step 2 -->
       <div class="form-step" id="step-2">
         <div class="form-grid">
+          <!-- Batch info box -->
+          <div class="batch-info-box" id="form-batch-info">
+            <span class="batch-badge" id="form-batch-badge">Batch ?</span>
+            <div class="batch-detail">
+              <strong id="form-batch-name">—</strong>
+              <span id="form-batch-months">—</span>
+            </div>
+          </div>
           <div class="form-group full">
             <label class="form-label">Pilih Durasi Program <span class="req">*</span></label>
             <div class="duration-selector" id="duration-selector"></div>
           </div>
-          <div class="form-group full"><label class="form-label">Rencana Tanggal Mulai <span class="req">*</span></label><input type="date" class="form-input" id="f-tgl-mulai" min=""></div>
+          <div class="form-group full">
+            <label class="form-label">Tanggal Mulai Magang <span class="req">*</span></label>
+            <input type="text" class="form-input" id="f-tgl-mulai" readonly style="background: var(--gray-light); cursor: not-allowed; font-weight: 700; color: var(--navy-deep);">
+            <span style="font-size: 11px; color: var(--gray-text); margin-top: 2px;">Tanggal mulai ditentukan otomatis sesuai batch yang sedang dibuka, tidak dapat diubah.</span>
+          </div>
           <div class="form-group full" style="margin-top: 0.5rem;">
             <div class="form-section-title">Upload Dokumen Persyaratan</div>
             <div class="upload-grid">
@@ -513,7 +559,6 @@
       </div>
     </div>
 
-    <!-- Status banner -->
     <div class="send-status" id="send-status"></div>
 
     <div class="form-footer">
@@ -564,7 +609,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 BMKG Maritim Tanjung Perak Surabaya. Hak cipta dilindungi undang-undang.</span>
+    <span>© 2026 BMKG Maritim Tanjung Perak Surabaya. Hak cipta dilindungi undang-undang.</span>
     <span>Dikembangkan untuk Program Magang <a href="#">2026</a></span>
   </div>
 </footer>
@@ -573,71 +618,142 @@
 // ─────────────────────────────────────────────
 //  GANTI URL INI dengan URL deployment Apps Script kamu
 // ─────────────────────────────────────────────
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyuCKyrtOnFf-ngTDvMxGk9jOQADbE42tL75HTL7TX3E5C9kW3ivW9TOUpxaQbBdsj-HQ/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzC8732JYwqJJIKV3x09QeFq5Pw9mJBLRQZX3GmeLr4j6_8o6JTboqecofbOpuW2b8w/exec';
 
-// ── QUOTA DATA ──
+// ─────────────────────────────────────────────
+//  DEFINISI 7 BATCH DALAM SETAHUN
+//  Batch ditentukan dari BULAN HARI INI (bulan saat user mengakses halaman),
+//  bukan dipilih sendiri oleh user. Tiap batch punya periode pendaftaran
+//  sendiri (regMonths) dan bulan mulai magang (startMonth).
+//  months/regMonths: 0=Jan, 11=Des
+// ─────────────────────────────────────────────
+const BULAN_NAMA = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+const BATCH_SCHEDULE = [
+  { num: 1, name: 'Batch 1', regMonths: [11, 0],  regLabel: 'Desember – Januari', startMonth: 1,  startLabel: 'Februari' },
+  { num: 2, name: 'Batch 2', regMonths: [1],       regLabel: 'Februari',          startMonth: 2,  startLabel: 'Maret' },
+  { num: 3, name: 'Batch 3', regMonths: [2, 3],    regLabel: 'Maret – April',     startMonth: 4,  startLabel: 'Mei' },
+  { num: 4, name: 'Batch 4', regMonths: [4, 5],    regLabel: 'Mei – Juni',        startMonth: 6,  startLabel: 'Juli' },
+  { num: 5, name: 'Batch 5', regMonths: [6],       regLabel: 'Juli',              startMonth: 7,  startLabel: 'Agustus' },
+  { num: 6, name: 'Batch 6', regMonths: [7, 8],    regLabel: 'Agustus – September', startMonth: 9, startLabel: 'Oktober' },
+  { num: 7, name: 'Batch 7', regMonths: [9, 10],   regLabel: 'Oktober – November', startMonth: 11, startLabel: 'Desember' },
+];
+
+/**
+ * Mengembalikan batch yang SEDANG BUKA berdasarkan bulan hari ini (0-11)
+ */
+function getOpenBatch(month) {
+  return BATCH_SCHEDULE.find(b => b.regMonths.includes(month)) || null;
+}
+
+/**
+ * Mengembalikan status batch dibanding bulan saat ini:
+ * 'open' | 'upcoming' | 'closed'
+ * Catatan: karena 7 batch menutup penuh 12 bulan tanpa celah,
+ * status ditentukan dengan membandingkan urutan periode terhadap bulan ini.
+ */
+function getBatchStatus(batch, nowMonth) {
+  if (batch.regMonths.includes(nowMonth)) return 'open';
+  // Cek apakah bulan ini "sebelum" periode batch dimulai (belum dibuka)
+  // atau "setelah" periode batch berakhir (sudah tutup), dengan
+  // memperhitungkan siklus tahunan (Des-Jan dianggap berurutan).
+  const firstRegMonth = batch.regMonths[0];
+  const lastRegMonth  = batch.regMonths[batch.regMonths.length - 1];
+  // Urutan linear berbasis Batch 1 dimulai dari Desember (bulan 11) sebagai titik awal siklus
+  const cycleIndex = (m) => (m - 11 + 12) % 12; // Desember=0, Januari=1, ... November=11
+  const nowIdx   = cycleIndex(nowMonth);
+  const startIdx = cycleIndex(firstRegMonth);
+  const endIdx   = cycleIndex(lastRegMonth);
+  if (nowIdx < startIdx) return 'upcoming';
+  if (nowIdx > endIdx) return 'closed';
+  return 'open';
+}
+
+/**
+ * Tanggal mulai magang otomatis (tanggal 1 di bulan startMonth batch ini).
+ * Jika startMonth lebih kecil dari bulan registrasi awal (misal Batch 1: reg Des-Jan, start Feb tahun yg sama dgn Jan),
+ * tahun disesuaikan otomatis.
+ */
+function getAutoStartDate(batch) {
+  const today = new Date();
+  let year = today.getFullYear();
+  // Jika bulan registrasi sekarang Desember tapi startMonth Februari, itu artinya Februari tahun depan
+  if (today.getMonth() === 11 && batch.startMonth < 11) year += 1;
+  return new Date(year, batch.startMonth, 1);
+}
+
+// ── QUOTA DATA (kuota fresh per batch, tidak pakai localStorage) ──
 const QUOTA_MAX = 10;
 const quotaData = {
-  '1-bulan': { label: '1 Bulan', registered: [], maxDuration: 30 },
-  '3-bulan': { label: '3 Bulan', registered: [], maxDuration: 90 },
-  '5-bulan': { label: '5 Bulan', registered: [], maxDuration: 150 }
+  '1-bulan': { label: '1 Bulan', maxDuration: 30 },
+  '3-bulan': { label: '3 Bulan', maxDuration: 90 },
+  '5-bulan': { label: '5 Bulan', maxDuration: 150 },
 };
 
-// ── LOAD dari localStorage saat halaman dibuka ──
-function loadQuotaFromStorage() {
-  ['1-bulan','3-bulan','5-bulan'].forEach(key => {
-    const saved = localStorage.getItem('quota_' + key);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      quotaData[key].registered = parsed.map(r => ({
-        start: new Date(r.start),
-        end: new Date(r.end)
-      }));
-    }
-  });
-}
+// Kuota diambil dari Google Sheets saja, default 0
+let quotaCounts = { '1-bulan': 0, '3-bulan': 0, '5-bulan': 0 };
 
-// ── SIMPAN ke localStorage ──
-function saveQuotaToStorage() {
-  ['1-bulan','3-bulan','5-bulan'].forEach(key => {
-    localStorage.setItem('quota_' + key, JSON.stringify(quotaData[key].registered));
-  });
-}
-
-loadQuotaFromStorage();
-
-// Kuota mulai dari 0, hanya bertambah saat ada pendaftar baru
-
-function getActiveCount(key) {
-  const today = new Date();
-  return quotaData[key].registered.filter(r => r.end > today).length;
-}
 function getQuotaInfo(key) {
-  const active = getActiveCount(key);
+  const active = quotaCounts[key] || 0;
   const available = QUOTA_MAX - active;
   return { active, available, full: available <= 0 };
 }
 
 const programInfo = {
-  '1-bulan': { title: 'Magang Singkat', featured: false, features: ['Orientasi sistem MMS','Pengolahan data harian','Laporan singkat','Sertifikat BMKG'] },
-  '3-bulan': { title: 'Magang Reguler', featured: true, badge: 'Paling Populer', features: ['Proyek penelitian mandiri','Akses AWS network','Bimbingan intensif','Sertifikat & rekomendasi','Laporan ilmiah'] },
-  '5-bulan': { title: 'Magang Komprehensif', featured: false, features: ['Riset penuh maritim','Ko-authorship laporan','Akses laboratorium','Sertifikat + portofolio','Rekomendasi karir'] }
+  '1-bulan': { title: 'Magang Singkat',       featured: false, features: ['Orientasi sistem MMS','Pengolahan data harian','Laporan singkat','Sertifikat BMKG'] },
+  '3-bulan': { title: 'Magang Reguler',       featured: true,  badge: 'Paling Populer', features: ['Proyek penelitian mandiri','Akses AWS network','Bimbingan intensif','Sertifikat & rekomendasi','Laporan ilmiah'] },
+  '5-bulan': { title: 'Magang Komprehensif',  featured: false, features: ['Riset penuh maritim','Ko-authorship laporan','Akses laboratorium','Sertifikat + portofolio','Rekomendasi karir'] },
 };
 
+// ── RENDER BATCH GRID (section Jadwal Batch) ──
+function renderBatchGrid() {
+  const grid = document.getElementById('batch-grid');
+  if (!grid) return;
+  const nowMonth = new Date().getMonth();
+  grid.innerHTML = BATCH_SCHEDULE.map(b => {
+    const status = getBatchStatus(b, nowMonth);
+    return `
+      <div class="batch-card ${status} reveal">
+        <div class="batch-num">Batch ${b.num}</div>
+        <div class="batch-name">Daftar: ${b.regLabel}</div>
+        <div class="batch-start-info"><i data-lucide="arrow-right" style="width:11px;height:11px;"></i> Mulai magang: ${b.startLabel}</div>
+      </div>`;
+  }).join('');
+  lucide.createIcons();
+  revealCheck();
+}
+
+// ── RENDER HERO QUOTA ──
 function renderHeroQuota() {
   const grid = document.getElementById('hero-quota-grid');
+  if (!grid) return;
   grid.innerHTML = '';
   ['1-bulan','3-bulan','5-bulan'].forEach(key => {
-    const q = quotaData[key];
     const info = getQuotaInfo(key);
     const pct = (info.active / QUOTA_MAX) * 100;
     const barClass = pct >= 100 ? 'full' : pct >= 60 ? 'mid' : 'low';
-    grid.innerHTML += `<div class="quota-item"><div class="quota-duration">${q.label}</div><div class="quota-bar-wrap"><div class="quota-bar ${barClass}" style="width:${pct}%"></div></div><div class="quota-num">${info.active}/${QUOTA_MAX} terisi</div></div>`;
+    grid.innerHTML += `<div class="quota-item"><div class="quota-duration">${quotaData[key].label}</div><div class="quota-bar-wrap"><div class="quota-bar ${barClass}" style="width:${pct}%"></div></div><div class="quota-num">${info.active}/${QUOTA_MAX} terisi</div></div>`;
   });
 }
 
+// ── RENDER PROGRAM CARDS ──
+// ── BANNER BATCH AKTIF DI ATAS PROGRAM GRID ──
+function renderActiveBatchBanner() {
+  const el = document.getElementById('active-batch-banner');
+  if (!el) return;
+  const nowMonth = new Date().getMonth();
+  const batch = getOpenBatch(nowMonth);
+  if (!batch) {
+    el.innerHTML = `<div style="background:#FEF3C7; border:1px solid #FCD34D; border-radius:10px; padding:0.875rem 1.25rem; font-size:13px; color:#92400E; font-weight:600;">Saat ini belum ada batch yang dibuka untuk pendaftaran. Silakan cek jadwal batch di atas.</div>`;
+    return;
+  }
+  el.innerHTML = `<div style="background:var(--foam); border:1px solid rgba(0,87,183,0.2); border-radius:10px; padding:0.875rem 1.25rem; font-size:13px; color:var(--navy-deep); font-weight:600; display:flex; align-items:center; gap:8px;"><i data-lucide="calendar-check" class="icon-sm" style="color:var(--ocean);"></i> Saat ini dibuka pendaftaran <strong>${batch.name}</strong> (${batch.regLabel}) — mulai magang <strong>${batch.startLabel}</strong>.</div>`;
+  lucide.createIcons();
+}
+
 function renderProgramCards() {
-  const grid = document.querySelector('.program-grid');
+  const grid = document.getElementById('program-grid');
+  if (!grid) return;
   grid.innerHTML = '';
   ['1-bulan','3-bulan','5-bulan'].forEach(key => {
     const prog = programInfo[key];
@@ -655,7 +771,7 @@ function renderProgramCards() {
         <div class="program-duration-tag"><i data-lucide="clock" class="icon-sm" style="margin-right:4px;"></i> ${quotaData[key].label}</div>
         <div class="program-title">${prog.title}</div>
         <div class="program-quota-wrap">
-          <div class="program-quota-label"><span>Kuota tersedia</span><strong>${info.active}/${QUOTA_MAX}</strong></div>
+          <div class="program-quota-label"><span>Kuota batch ini</span><strong>${info.active}/${QUOTA_MAX}</strong></div>
           <div class="quota-track"><div class="quota-fill ${fillClass}" style="width:${pct}%"></div></div>
           <div style="font-size:11px; margin-top:4px; font-weight:600; color: ${info.full ? 'var(--danger)' : pct >= 60 ? '#D97706' : 'var(--success)'};">${statusText}</div>
         </div>
@@ -665,6 +781,34 @@ function renderProgramCards() {
   });
   lucide.createIcons();
   revealCheck();
+}
+
+// ── TERAPKAN BATCH AKTIF KE FORM (info box + tanggal mulai otomatis) ──
+let activeFormBatch = null;
+
+function applyCurrentBatchToForm() {
+  const nowMonth = new Date().getMonth();
+  activeFormBatch = getOpenBatch(nowMonth);
+  const badge  = document.getElementById('form-batch-badge');
+  const name   = document.getElementById('form-batch-name');
+  const months = document.getElementById('form-batch-months');
+  const tglInput = document.getElementById('f-tgl-mulai');
+
+  if (!activeFormBatch) {
+    badge.textContent  = 'Tutup';
+    name.textContent   = 'Tidak ada batch yang sedang dibuka';
+    months.textContent = 'Silakan cek kembali jadwal batch berikutnya';
+    tglInput.value = '-';
+    return;
+  }
+
+  const startDate = getAutoStartDate(activeFormBatch);
+  const startStr  = startDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  badge.textContent  = activeFormBatch.name;
+  name.textContent   = 'Pendaftaran: ' + activeFormBatch.regLabel;
+  months.textContent = 'Mulai magang: ' + activeFormBatch.startLabel + ' (' + startStr + ')';
+  tglInput.value = startStr;
 }
 
 // ── FORM STATE ──
@@ -678,13 +822,13 @@ function openForm(duration) {
   renderDurationSelector();
   updateFormUI();
   hideSendStatus();
+  applyCurrentBatchToForm();
   document.getElementById('form-overlay').classList.add('active');
   document.body.style.overflow = 'hidden';
   if (duration) {
     const opt = document.querySelector(`.duration-opt[data-key="${duration}"]`);
     if (opt && !opt.classList.contains('disabled')) opt.click();
   }
-  document.getElementById('f-tgl-mulai').min = new Date().toISOString().split('T')[0];
   document.querySelector('.form-modal').scrollTop = 0;
 }
 
@@ -751,8 +895,8 @@ function validateStep(step) {
     return true;
   }
   if (step === 2) {
+    if (!activeFormBatch) { alert('Maaf, saat ini tidak ada batch pendaftaran yang sedang dibuka.'); return false; }
     if (!selectedDuration) { alert('Pilih durasi program terlebih dahulu.'); return false; }
-    if (!document.getElementById('f-tgl-mulai').value) { alert('Pilih tanggal mulai magang.'); return false; }
     if (!uploadedFiles.cv)        { alert('Mohon upload CV Anda (PDF).'); return false; }
     if (!uploadedFiles.transkip)  { alert('Mohon upload Transkrip Nilai (PDF).'); return false; }
     if (!uploadedFiles.proposal)  { alert('Mohon upload Proposal Magang (PDF).'); return false; }
@@ -790,6 +934,9 @@ function updateFormUI() {
 }
 
 function renderSummary() {
+  const tglMulai = document.getElementById('f-tgl-mulai').value;
+  const batchLabel = activeFormBatch ? `${activeFormBatch.name} (Mulai ${activeFormBatch.startLabel})` : '-';
+
   const rows = [
     ['Nama Lengkap', document.getElementById('f-nama').value],
     ['NIM', document.getElementById('f-nim').value],
@@ -801,7 +948,8 @@ function renderSummary() {
     ['Semester', document.getElementById('f-semester').value],
     ['IPK', document.getElementById('f-ipk').value],
     ['Durasi Program', quotaData[selectedDuration]?.label || selectedDuration],
-    ['Tanggal Mulai', document.getElementById('f-tgl-mulai').value],
+    ['Batch Penerimaan', batchLabel],
+    ['Tanggal Mulai', tglMulai],
     ['CV', uploadedFiles.cv?.name || '-'],
     ['Transkrip', uploadedFiles.transkip?.name || '-'],
     ['Proposal', uploadedFiles.proposal?.name || '-'],
@@ -811,7 +959,7 @@ function renderSummary() {
   if (skill) rows.push(['Keahlian', skill]);
   document.getElementById('summary-content').innerHTML = rows.map(([l,v]) =>
     `<div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(0,87,183,0.08);font-size:12px;">
-      <span style="color:var(--gray-text);min-width:130px;">${l}</span>
+      <span style="color:var(--gray-text);min-width:140px;">${l}</span>
       <span style="font-weight:600;color:var(--navy-deep);text-align:right;word-break:break-all;">${v}</span>
     </div>`).join('');
 }
@@ -838,7 +986,7 @@ function fileToBase64(file) {
   });
 }
 
-// ── KIRIM KE GOOGLE APPS SCRIPT (POST) ──
+// ── KIRIM KE GOOGLE APPS SCRIPT ──
 async function sendToGoogleSheets(data) {
   const [cvB64, transkipB64, proposalB64, fotoB64] = await Promise.all([
     fileToBase64(uploadedFiles.cv),
@@ -846,7 +994,6 @@ async function sendToGoogleSheets(data) {
     fileToBase64(uploadedFiles.proposal),
     fileToBase64(uploadedFiles.foto),
   ]);
-
   const payload = {
     ...data,
     fileCV:       cvB64,
@@ -854,15 +1001,12 @@ async function sendToGoogleSheets(data) {
     fileProposal: proposalB64,
     fileFoto:     fotoB64,
   };
-
-  // Gunakan POST dengan Content-Type text/plain agar lolos CORS preflight
   const resp = await fetch(GOOGLE_SCRIPT_URL, {
     method:  'POST',
-    mode:    'no-cors',           // Apps Script tidak kirim CORS header → no-cors
+    mode:    'no-cors',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body:    JSON.stringify(payload),
   });
-  // no-cors → response.type === 'opaque', tidak bisa baca body — ini normal
   return resp;
 }
 
@@ -879,11 +1023,13 @@ async function submitForm() {
 
   showSendStatus('info', 'Sedang mengirim data ke server, mohon tunggu...');
 
-  const tglMulai  = new Date(document.getElementById('f-tgl-mulai').value);
-  const tglSelesai = new Date(tglMulai);
+  const tglMulaiStr = document.getElementById('f-tgl-mulai').value;
+  const tglMulai    = getAutoStartDate(activeFormBatch);
+  const tglSelesai  = new Date(tglMulai);
   tglSelesai.setDate(tglSelesai.getDate() + quotaData[selectedDuration].maxDuration);
-  quotaData[selectedDuration].registered.push({ start: tglMulai, end: tglSelesai });
-  saveQuotaToStorage();
+
+  const batch = activeFormBatch;
+  const batchLabel = batch ? `${batch.name} (Mulai ${batch.startLabel})` : '-';
 
   const regId = 'BMKG-' + Date.now().toString().slice(-6);
   const nama  = document.getElementById('f-nama').value;
@@ -892,28 +1038,29 @@ async function submitForm() {
   try {
     await sendToGoogleSheets({
       regId,
-      timestamp:   new Date().toLocaleString('id-ID'),
+      timestamp:    new Date().toLocaleString('id-ID'),
+      batch:        batchLabel,
+      batchNum:     batch ? batch.num : '-',
       nama,
-      nim:         document.getElementById('f-nim').value,
+      nim:          document.getElementById('f-nim').value,
       email,
-      telp:        document.getElementById('f-telp').value,
-      universitas: document.getElementById('f-univ').value,
-      jurusan:     document.getElementById('f-jurusan').value,
-      prodi:       document.getElementById('f-prodi').value,
-      semester:    document.getElementById('f-semester').value,
-      ipk:         document.getElementById('f-ipk').value,
-      durasi:      quotaData[selectedDuration]?.label || selectedDuration,
-      programNama: programInfo[selectedDuration]?.title || '',
-      tglMulai:    document.getElementById('f-tgl-mulai').value,
-      tglSelesai:  tglSelesai.toISOString().split('T')[0],
-      keahlian:    document.getElementById('f-skill').value,
-      namaCV:      uploadedFiles.cv?.name || '-',
-      namaTranskip:uploadedFiles.transkip?.name || '-',
-      namaProposal:uploadedFiles.proposal?.name || '-',
-      namaFoto:    uploadedFiles.foto?.name || '-',
+      telp:         document.getElementById('f-telp').value,
+      universitas:  document.getElementById('f-univ').value,
+      jurusan:      document.getElementById('f-jurusan').value,
+      prodi:        document.getElementById('f-prodi').value,
+      semester:     document.getElementById('f-semester').value,
+      ipk:          document.getElementById('f-ipk').value,
+      durasi:       quotaData[selectedDuration]?.label || selectedDuration,
+      programNama:  programInfo[selectedDuration]?.title || '',
+      tglMulai:     tglMulai.toISOString().split('T')[0],
+      tglSelesai:   tglSelesai.toISOString().split('T')[0],
+      keahlian:     document.getElementById('f-skill').value,
+      namaCV:       uploadedFiles.cv?.name || '-',
+      namaTranskip: uploadedFiles.transkip?.name || '-',
+      namaProposal: uploadedFiles.proposal?.name || '-',
+      namaFoto:     uploadedFiles.foto?.name || '-',
     });
   } catch (err) {
-    // no-cors mode kadang throw error network — masih dianggap terkirim
     console.warn('fetch warning (no-cors normal):', err);
   }
 
@@ -921,6 +1068,7 @@ async function submitForm() {
   document.getElementById('success-info').innerHTML = `
     <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(0,87,183,0.1);font-size:12px;"><span style="color:var(--gray-text)">Nomor Registrasi</span><strong style="color:var(--navy)">${regId}</strong></div>
     <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(0,87,183,0.1);font-size:12px;"><span style="color:var(--gray-text)">Nama</span><strong style="color:var(--navy-deep)">${nama}</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(0,87,183,0.1);font-size:12px;"><span style="color:var(--gray-text)">Batch</span><strong style="color:var(--navy-deep)">${batchLabel}</strong></div>
     <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(0,87,183,0.1);font-size:12px;"><span style="color:var(--gray-text)">Program</span><strong style="color:var(--navy-deep)">${programInfo[selectedDuration].title} (${quotaData[selectedDuration].label})</strong></div>
     <div style="display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(0,87,183,0.1);font-size:12px;"><span style="color:var(--gray-text)">Email</span><strong style="color:var(--navy-deep)">${email}</strong></div>
     <div style="display:flex;justify-content:space-between;padding:0.4rem 0;font-size:12px;"><span style="color:var(--gray-text)">Status</span><strong style="color:var(--success)">✓ Berhasil Diterima</strong></div>`;
@@ -933,6 +1081,9 @@ async function submitForm() {
 
   closeForm();
   document.getElementById('success-overlay').classList.add('active');
+
+  // Refresh kuota dari Sheets setelah submit
+  await loadQuotaFromSheets();
   renderHeroQuota();
   renderProgramCards();
   lucide.createIcons();
@@ -941,6 +1092,21 @@ async function submitForm() {
 function closeSuccess() {
   document.getElementById('success-overlay').classList.remove('active');
   document.body.style.overflow = '';
+}
+
+// ── LOAD KUOTA DARI GOOGLE SHEETS ──
+async function loadQuotaFromSheets() {
+  try {
+    const res  = await fetch(GOOGLE_SCRIPT_URL);
+    const json = await res.json();
+    if (json.status === 'ok' && json.quota) {
+      ['1-bulan','3-bulan','5-bulan'].forEach(key => {
+        quotaCounts[key] = json.quota[key] || 0;
+      });
+    }
+  } catch(err) {
+    console.warn('Gagal load kuota dari Sheets, kuota tetap 0:', err);
+  }
 }
 
 // ── UTILITIES ──
@@ -960,33 +1126,8 @@ function revealObserver() {
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 }
 function revealCheck() {
-  document.querySelectorAll('.reveal').forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible'); });
   const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
   document.querySelectorAll('.reveal:not(.visible)').forEach(el => obs.observe(el));
-}
-
-// ── DRAG & DROP ──
-// ── LOAD KUOTA DARI GOOGLE SHEETS ──
-async function loadQuotaFromSheets() {
-  try {
-    const res = await fetch(GOOGLE_SCRIPT_URL);
-    const json = await res.json();
-    if (json.status === 'ok' && json.quota) {
-      ['1-bulan','3-bulan','5-bulan'].forEach(key => {
-        const count = json.quota[key] || 0;
-        // Reset dan isi registered dengan data dummy sesuai jumlah dari Sheets
-        quotaData[key].registered = [];
-        for (let i = 0; i < count; i++) {
-          const future = new Date();
-          future.setDate(future.getDate() + quotaData[key].maxDuration);
-          quotaData[key].registered.push({ start: new Date(), end: future });
-        }
-      });
-      saveQuotaToStorage();
-    }
-  } catch(err) {
-    console.warn('Gagal load kuota dari Sheets, pakai localStorage:', err);
-  }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -1003,13 +1144,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       handleFile(key, input);
     });
   });
-  // Tampilkan dulu dari localStorage, lalu update dari Sheets
+
+  renderBatchGrid();
+  renderActiveBatchBanner();
   renderHeroQuota();
   renderProgramCards();
   revealObserver();
   renderParticles();
   lucide.createIcons();
-  // Ambil data real dari Sheets lalu render ulang
+
+  // Ambil kuota real dari Sheets lalu render ulang
   await loadQuotaFromSheets();
   renderHeroQuota();
   renderProgramCards();
