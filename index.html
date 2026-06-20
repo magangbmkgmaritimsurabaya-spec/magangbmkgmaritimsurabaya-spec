@@ -333,7 +333,7 @@
   <div class="hero-particles" id="particles"></div>
   <div class="hero-content">
     <div>
-      <div class="hero-eyebrow">Program Magang 2026 · Terbuka</div>
+      <div class="hero-eyebrow">Program Magang <span id="year-hero">2026</span> · Terbuka</div>
       <h1 class="hero-title">Bergabunglah dengan<br><em>Garda Terdepan</em><br>Keselamatan Maritim</h1>
       <p class="hero-desc">Dapatkan pengalaman langsung dalam operasional sistem meteorologi maritim skala nasional bersama tim profesional BMKG Tanjung Perak.</p>
       <div class="hero-actions">
@@ -417,7 +417,7 @@
 <section id="batch">
   <div class="container">
     <div class="section-tag">Jadwal Penerimaan</div>
-    <h2 class="section-title">Batch Magang 2026</h2>
+    <h2 class="section-title">Batch Magang <span id="year-batch">2026</span></h2>
     <p class="section-desc">Pendaftaran dibagi dalam 7 batch per tahun mengikuti ritme akademik. Batch ditentukan otomatis berdasarkan bulan pendaftaran Anda.</p>
     <div class="batch-grid reveal" id="batch-grid"></div>
   </div>
@@ -477,7 +477,7 @@
   <div class="form-modal">
     <div class="form-header">
       <button class="form-close" onclick="closeForm()"><i data-lucide="x"></i></button>
-      <div class="form-header-tag">Pendaftaran Program Magang 2026</div>
+      <div class="form-header-tag">Pendaftaran Program Magang <span id="year-form">2026</span></div>
       <h2>Formulir Pendaftaran Magang</h2>
       <p>Stasiun Meteorologi Maritim Kelas II Tanjung Perak Surabaya</p>
     </div>
@@ -609,8 +609,8 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 BMKG Maritim Tanjung Perak Surabaya. Hak cipta dilindungi undang-undang.</span>
-    <span>Dikembangkan untuk Program Magang <a href="#">2026</a></span>
+    <span>© <span id="year-copyright">2026</span> BMKG Maritim Tanjung Perak Surabaya. Hak cipta dilindungi undang-undang.</span>
+    <span>Dikembangkan untuk Program Magang <a href="#" id="year-footer-program">2026</a></span>
   </div>
 </footer>
 
@@ -1110,6 +1110,15 @@ async function loadQuotaFromSheets() {
 }
 
 // ── UTILITIES ──
+// ── UPDATE SEMUA TEKS TAHUN OTOMATIS KE TAHUN BERJALAN ──
+function updateYearTexts() {
+  const currentYear = new Date().getFullYear();
+  ['year-hero', 'year-batch', 'year-form', 'year-copyright', 'year-footer-program'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = currentYear;
+  });
+}
+
 function renderParticles() {
   const container = document.getElementById('particles');
   for (let i = 0; i < 20; i++) {
@@ -1149,6 +1158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderActiveBatchBanner();
   renderHeroQuota();
   renderProgramCards();
+  updateYearTexts();
   revealObserver();
   renderParticles();
   lucide.createIcons();
