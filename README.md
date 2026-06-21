@@ -95,7 +95,7 @@ Setiap pendaftaran baru otomatis menambah satu baris di Google Sheets dengan kol
 Berkas yang diunggah pendaftar (CV, Transkrip, Proposal, Pas Foto) otomatis tersimpan rapi dengan struktur folder:
 
 ```
-📁 Folder Utama (yang sudah Anda buat)
+📁 Folder Utama 
  └── 📁 Batch 1
  │    └── 📁 Nama Pendaftar - BMKG-123456
  │         ├── CV_nama_file.pdf
