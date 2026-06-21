@@ -1,0 +1,287 @@
+/**
+ * ============================================================
+ *  BMKG MARITIM TANJUNG PERAK — BACKEND PENDAFTARAN MAGANG
+ *  Google Apps Script (Code.gs)
+ * ============================================================
+ *  Fitur:
+ *  - Menyimpan data pendaftar ke Google Sheets
+ *  - Menyimpan file (CV, Transkrip, Proposal, Foto) ke Google Drive
+ *  - Menghitung kuota per durasi program SECARA REAL dari Sheets,
+ *    HANYA untuk batch yang sedang dibuka saat ini (mulai dari 0)
+ *  - Batch (1–7) ditentukan dari BULAN PENDAFTARAN (bukan tanggal mulai),
+ *    dan divalidasi ulang di server (bukan percaya begitu saja dari client)
+ *  - Menolak pendaftaran jika dikirim di luar periode batch yang sah
+ *  - Endpoint GET untuk ambil status batch & kuota (dipanggil dari web)
+ *  - Endpoint POST untuk submit pendaftaran baru
+ * ============================================================
+ */
+
+// ── KONFIGURASI ──
+const SHEET_ID        = '1fLlpnZtQ1wfBcVOgdvRXngbmHtrCZCEDijyfwjSDMO0';  // ID Google Sheets
+const SHEET_NAME       = 'Pendaftar';                         // nama tab/sheet
+const DRIVE_FOLDER_ID  = '1BP5-0l4hXmmKytk_EzKcqLIh8zJGXNbL'; // folder utama penyimpanan file
+const QUOTA_MAX        = 10; // kuota maksimal per durasi PER BATCH
+
+// Header kolom di Google Sheets (urutan harus sesuai dengan appendRow di bawah)
+const HEADERS = [
+  'Reg ID', 'Timestamp', 'Batch', 'Batch No',
+  'Nama', 'NIM', 'Email', 'No. WhatsApp',
+  'Universitas', 'Jurusan', 'Program Studi', 'Semester', 'IPK',
+  'Durasi', 'Nama Program', 'Tanggal Mulai', 'Tanggal Selesai', 'Keahlian',
+  'Link CV', 'Link Transkrip', 'Link Proposal', 'Link Foto', 'Status'
+];
+
+/**
+ * ============================================================
+ *  DEFINISI 7 BATCH (harus selalu sinkron dengan index.html)
+ *  regMonths  = bulan-bulan periode PENDAFTARAN dibuka (0=Jan, 11=Des)
+ *  startMonth = bulan MULAI MAGANG (1 bulan setelah periode pendaftaran tutup)
+ * ============================================================
+ */
+const BATCH_SCHEDULE = [
+  { num: 1, name: 'Batch 1', regMonths: [11, 0], regLabel: 'Desember – Januari',   startMonth: 1,  startLabel: 'Februari' },
+  { num: 2, name: 'Batch 2', regMonths: [1],      regLabel: 'Februari',            startMonth: 2,  startLabel: 'Maret' },
+  { num: 3, name: 'Batch 3', regMonths: [2, 3],   regLabel: 'Maret – April',       startMonth: 4,  startLabel: 'Mei' },
+  { num: 4, name: 'Batch 4', regMonths: [4, 5],   regLabel: 'Mei – Juni',          startMonth: 6,  startLabel: 'Juli' },
+  { num: 5, name: 'Batch 5', regMonths: [6],      regLabel: 'Juli',                startMonth: 7,  startLabel: 'Agustus' },
+  { num: 6, name: 'Batch 6', regMonths: [7, 8],   regLabel: 'Agustus – September', startMonth: 9,  startLabel: 'Oktober' },
+  { num: 7, name: 'Batch 7', regMonths: [9, 10],  regLabel: 'Oktober – November',  startMonth: 11, startLabel: 'Desember' },
+];
+
+/**
+ * Mengembalikan batch yang SEDANG BUKA berdasarkan bulan pendaftaran (0-11).
+ * Karena 7 batch menutup penuh 12 bulan tanpa celah, selalu ada satu batch
+ * yang cocok untuk bulan berapa pun.
+ */
+function getOpenBatch(month) {
+  return BATCH_SCHEDULE.find(b => b.regMonths.indexOf(month) !== -1) || null;
+}
+
+/**
+ * Tanggal mulai magang otomatis (tanggal 1 di bulan startMonth batch),
+ * dengan penyesuaian tahun otomatis untuk kasus Batch 1 (Des → Feb tahun depan).
+ */
+function getAutoStartDate(batch, referenceDate) {
+  const ref = referenceDate || new Date();
+  let year = ref.getFullYear();
+  if (ref.getMonth() === 11 && batch.startMonth < 11) year += 1;
+  return new Date(year, batch.startMonth, 1);
+}
+
+/**
+ * ============================================================
+ *  GET — dipanggil dari web untuk ambil status batch & kuota saat ini.
+ *  Kuota dihitung HANYA untuk batch yang sedang dibuka SEKARANG,
+ *  sehingga setiap batch baru otomatis mulai dari 0 lagi.
+ * ============================================================
+ */
+function doGet(e) {
+  try {
+    const sheet = getSheet();
+    const data  = sheet.getDataRange().getValues();
+
+    const now = new Date();
+    const currentBatch = getOpenBatch(now.getMonth());
+
+    const quota = { '1-bulan': 0, '3-bulan': 0, '5-bulan': 0 };
+    const durasiMap = { '1 Bulan': '1-bulan', '3 Bulan': '3-bulan', '5 Bulan': '5-bulan' };
+
+    if (currentBatch) {
+      // data[0] = header, mulai dari baris 1
+      for (let i = 1; i < data.length; i++) {
+        const row     = data[i];
+        const batchNo = row[3];  // kolom "Batch No"
+        const durasi  = row[13]; // kolom "Durasi"
+        const status  = row[22]; // kolom "Status"
+
+        // Hanya hitung pendaftar di batch yang SAMA dengan batch yang sedang dibuka
+        // dan statusnya bukan "Dibatalkan"
+        if (Number(batchNo) === currentBatch.num && status !== 'Dibatalkan') {
+          const key = durasiMap[durasi];
+          if (key) quota[key] = (quota[key] || 0) + 1;
+        }
+      }
+    }
+
+    return jsonResponse({
+      status: 'ok',
+      currentBatch: currentBatch ? {
+        num: currentBatch.num,
+        name: currentBatch.name,
+        regLabel: currentBatch.regLabel,
+        startLabel: currentBatch.startLabel
+      } : null,
+      quota: quota,
+      quotaMax: QUOTA_MAX
+    });
+
+  } catch (err) {
+    return jsonResponse({ status: 'error', message: err.message });
+  }
+}
+
+/**
+ * ============================================================
+ *  POST — submit pendaftaran baru
+ *  Batch TIDAK dipercaya dari client — server menentukan ulang
+ *  berdasarkan tanggal SAAT INI (waktu submit diterima server),
+ *  lalu menolak jika ternyata tidak ada batch yang sah dibuka.
+ * ============================================================
+ */
+function doPost(e) {
+  try {
+    const payload = JSON.parse(e.postData.contents);
+    const sheet   = getSheet();
+
+    // Tentukan batch dari waktu SERVER menerima request (sumber kebenaran),
+    // bukan dari nilai batch yang dikirim client.
+    const now = new Date();
+    const batch = getOpenBatch(now.getMonth());
+
+    if (!batch) {
+      return jsonResponse({ status: 'error', message: 'Saat ini tidak ada batch pendaftaran yang sedang dibuka.' });
+    }
+
+    // Cek kuota batch ini sebelum diterima
+    const currentCount = countActiveInBatch(sheet, batch.num, payload.durasi);
+    if (currentCount >= QUOTA_MAX) {
+      return jsonResponse({ status: 'error', message: 'Kuota untuk durasi ini di ' + batch.name + ' sudah penuh.' });
+    }
+
+    // Tanggal mulai & selesai dihitung ulang di server berdasarkan batch yang sah
+    const tglMulaiDate = getAutoStartDate(batch, now);
+    const maxDurationDays = { '1 Bulan': 30, '3 Bulan': 90, '5 Bulan': 150 };
+    const tglSelesaiDate = new Date(tglMulaiDate);
+    tglSelesaiDate.setDate(tglSelesaiDate.getDate() + (maxDurationDays[payload.durasi] || 30));
+
+    // Simpan file ke Drive, dapatkan link
+    const folder = DriveApp.getFolderById(DRIVE_FOLDER_ID);
+    const batchFolder = getOrCreateSubfolder(folder, batch.name);
+    const pendaftarFolder = getOrCreateSubfolder(batchFolder, payload.nama + ' - ' + payload.regId);
+
+    const linkCV       = saveFileToDrive(pendaftarFolder, payload.fileCV,       payload.namaCV,       'CV');
+    const linkTranskip = saveFileToDrive(pendaftarFolder, payload.fileTranskip, payload.namaTranskip, 'Transkrip');
+    const linkProposal = saveFileToDrive(pendaftarFolder, payload.fileProposal, payload.namaProposal, 'Proposal');
+    const linkFoto      = saveFileToDrive(pendaftarFolder, payload.fileFoto,     payload.namaFoto,     'Foto');
+
+    // Tulis baris baru ke Sheets
+    sheet.appendRow([
+      payload.regId,
+      payload.timestamp,
+      batch.name + ' (Mulai ' + batch.startLabel + ')',
+      batch.num,
+      payload.nama,
+      payload.nim,
+      payload.email,
+      payload.telp,
+      payload.universitas,
+      payload.jurusan,
+      payload.prodi,
+      payload.semester,
+      payload.ipk,
+      payload.durasi,
+      payload.programNama,
+      formatDate(tglMulaiDate),
+      formatDate(tglSelesaiDate),
+      payload.keahlian,
+      linkCV,
+      linkTranskip,
+      linkProposal,
+      linkFoto,
+      'Menunggu Verifikasi'
+    ]);
+
+    return jsonResponse({ status: 'ok', message: 'Pendaftaran berhasil disimpan', batch: batch.name });
+
+  } catch (err) {
+    return jsonResponse({ status: 'error', message: err.message });
+  }
+}
+
+/**
+ * ============================================================
+ *  HELPER — hitung jumlah pendaftar aktif di batch & durasi tertentu
+ * ============================================================
+ */
+function countActiveInBatch(sheet, batchNum, durasiLabel) {
+  const data = sheet.getDataRange().getValues();
+  let count = 0;
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    if (Number(row[3]) === batchNum && row[13] === durasiLabel && row[22] !== 'Dibatalkan') {
+      count++;
+    }
+  }
+  return count;
+}
+
+/**
+ * ============================================================
+ *  HELPER — format tanggal jadi 'YYYY-MM-DD'
+ * ============================================================
+ */
+function formatDate(dateObj) {
+  return Utilities.formatDate(dateObj, Session.getScriptTimeZone() || 'Asia/Jakarta', 'yyyy-MM-dd');
+}
+
+/**
+ * ============================================================
+ *  HELPER — ambil/siapkan sheet, tambahkan header jika belum ada
+ * ============================================================
+ */
+function getSheet() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+  }
+  if (sheet.getRange(1, 1).getValue() === '') {
+    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+    sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold').setBackground('#002366').setFontColor('#FFFFFF');
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+/**
+ * ============================================================
+ *  HELPER — buat sub-folder Drive jika belum ada
+ * ============================================================
+ */
+function getOrCreateSubfolder(parentFolder, name) {
+  const existing = parentFolder.getFoldersByName(name);
+  if (existing.hasNext()) return existing.next();
+  return parentFolder.createFolder(name);
+}
+
+/**
+ * ============================================================
+ *  HELPER — simpan file Base64 ke Drive, return link
+ * ============================================================
+ */
+function saveFileToDrive(folder, base64Data, fileName, label) {
+  if (!base64Data || !fileName || fileName === '-') return '-';
+  try {
+    const mimeType = fileName.toLowerCase().endsWith('.pdf') ? 'application/pdf'
+                    : fileName.toLowerCase().match(/\.(jpg|jpeg)$/) ? 'image/jpeg'
+                    : fileName.toLowerCase().endsWith('.png') ? 'image/png'
+                    : 'application/octet-stream';
+    const blob = Utilities.newBlob(Utilities.base64Decode(base64Data), mimeType, label + '_' + fileName);
+    const file = folder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    return file.getUrl();
+  } catch (err) {
+    return 'Gagal upload: ' + err.message;
+  }
+}
+
+/**
+ * ============================================================
+ *  HELPER — response JSON dengan header yang sesuai
+ * ============================================================
+ */
+function jsonResponse(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
